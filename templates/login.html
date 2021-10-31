@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+    {# Login page #}
+    {% if not current_user.is_authenticated %}
+        <div class="column is-4 is-offset-4">
+            <h3 class="title">Login</h3>
+            <div class="box">
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        <div class="notification is-danger">
+                            {{ messages[0] }}
+                        </div>
+                    {% endif %}
+                {% endwith %}
+                {% if not session['logins'] or session['logins'] < 3 %}
+                    <form method="POST">
+
+                        <div class="field">
+                            {{ form.csrf_token() }}
+                            <div class="control">
+                                {{ form.username(class="input", placeholder="Username") }}
+                                {% for error in form.username.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <div class="control">
+                                {{ form.password(class="input", placeholder="Password") }}
+                                {% for error in form.password.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <div class="control">
+                                {{ form.pinkey(class="input", placeholder="Time-Based PIN") }}
+
+                                {% for error in form.pinkey.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div>
+                            {{ form.recaptcha }}
+                            {% for error in form.recaptcha.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+
+                        <div class = "styleclass">
+                            {{ form.submit(class="button is-info is-centered") }}
+                        </div>
+
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+        {% else %}
+            <h3 class="title is-3">You are already logged in</h3>
+    {% endif %}
+{% endblock %}
