@@ -2,14 +2,14 @@
 import re
 from flask_wtf import FlaskForm, RecaptchaField
 from wtforms import StringField, SubmitField, PasswordField
-from wtforms.validators import Required, Email, Length, EqualTo, ValidationError
+from wtforms.validators import InputRequired, Email, Length, EqualTo, ValidationError
 
 
 # Login Form
 class LoginForm(FlaskForm):
-    username = StringField(validators=[Required(), Email()])
-    password = PasswordField(validators=[Required()])
-    pinkey = StringField(validators=[Required(), Length(6, message='Length must be exactly 6 digits.')])
+    username = StringField(validators=[InputRequired(), Email()])
+    password = PasswordField(validators=[InputRequired()])
+    pinkey = StringField(validators=[InputRequired(), Length(6, message='Length must be exactly 6 digits.')])
     recaptcha = RecaptchaField()
     submit = SubmitField()
 
@@ -25,10 +25,10 @@ def character_check(form, field):
 
 # Register Form
 class RegisterForm(FlaskForm):
-    email = StringField(validators=[Required(), Email()])
-    firstname = StringField(validators=[Required(), character_check])
-    lastname = StringField(validators=[Required(), character_check])
-    phone = StringField(validators=[Required()])
+    email = StringField(validators=[InputRequired(), Email()])
+    firstname = StringField(validators=[InputRequired(), character_check])
+    lastname = StringField(validators=[InputRequired(), character_check])
+    phone = StringField(validators=[InputRequired()])
 
     # Function to validate the correct format of phone.
     def validate_phone(form, field):
@@ -39,12 +39,12 @@ class RegisterForm(FlaskForm):
                                   ' (4 numbers - 3 numbers - 4 numbers.)')
         return
 
-    password = PasswordField(validators=[Required(), Length(min=6, max=12, message='Password must be between 6 and 12 '
+    password = PasswordField(validators=[InputRequired(), Length(min=6, max=12, message='Password must be between 6 and 12 '
                                                                                    'characters in length.')])
-    confirm_password = PasswordField(validators=[Required(), EqualTo('password', message='Both password fields must '
+    confirm_password = PasswordField(validators=[InputRequired(), EqualTo('password', message='Both password fields must '
                                                                                          'be equal!')])
-    pin_key = StringField(validators=[Required(), Length(32, message="Pin Key must be exactly 32 characters long.")])
-    submit = SubmitField(validators=[Required()])
+    pin_key = StringField(validators=[InputRequired(), Length(32, message="Pin Key must be exactly 32 characters long.")])
+    submit = SubmitField(validators=[InputRequired()])
 
     # Function to validate the password.
     def validate_password(self, password):
